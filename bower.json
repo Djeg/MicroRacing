@@ -1,0 +1,13 @@
+{
+  "name": "micro-racing",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Djeg/MicroRacing",
+  "authors": [
+    "David Jegat <david.jegat@gmail.com>"
+  ],
+  "description": "A simple HTML5 game inspired by micro machines",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "~2.0.3"
+  }
+}

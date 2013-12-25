@@ -1,0 +1,4 @@
+compiled/*
+dist/*
+lib/*
+node_modules/*
