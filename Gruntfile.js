@@ -9,29 +9,28 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
+        compress: false,
         banner: '/*! David Jegat <david.jegat@gmail.com> <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
-        compress: {
-          global_defs: {
-            "DEBUG": false
-          },
-          dead_code: true
-        },
         expand: false,
-        report: 'min',
-        mangle: true
+        beautify: true,
+        report: false,
+        mangle: false
       },
       all: {
         files: {
-          'dist/app.js': ['lib/**/*.js', 'compiled/**/**.js']
+          'dist/app.js': grunt.file.readYAML('.compilation.yml')
         }
       }
     },
     coffee: {
       compiled: {
+        options: {
+          bare: true,
+        },
         expand: true,
         flattern: true,
         cwd: 'src',
-        src: ['**/*.coffee'],
+        src: '**/*.coffee',
         dest: 'compiled',
         ext: '.js'
       }
@@ -71,7 +70,14 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('install', ['bower:install']);
+  grunt.registerTask('copy-dist', 'Copy dist to normal file', function() {
+    if (fs.existsSync('./src/config.coffee.dist') && !fs.existsSync('./src/config.coffee')) {
+      var content = fs.readFileSync('./src/config.coffee.dist');
+      fs.writeFileSync('./src/config.coffee', content);
+    }
+  });
+
+  grunt.registerTask('install', ['bower:install', 'copy-dist']);
   grunt.registerTask('compiled', ['cleanup', 'coffee', 'uglify:all']);
   grunt.registerTask('default', ['install', 'compiled']);
 }

@@ -2,3 +2,4 @@ compiled/*
 dist/*
 lib/*
 node_modules/*
+src/config.coffee
