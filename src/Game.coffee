@@ -25,13 +25,17 @@ class Game
         nH = parseInt nW/ratio
       else
         break
-    canvas.css {
+    css = {
       display: "block"
       width: "#{nW}px"
       height: "#{nH}px"
       margin: "auto"
-      border: "1px solid black"
     }
+    if config.BORDER
+      css['border'] = "1px solid black"
+    else
+      css['border'] = "none"
+    canvas.css(css)
 
   ###*
   * @constructor
@@ -42,8 +46,6 @@ class Game
     @element  = $ "##{id}"
     if @element.length < 1
       throw "No DOM element with id #{id}"
-    @element.width config.RESOLUTION.WIDTH
-    @element.height config.RESOLUTION.HEIGHT
     @context  = @element[0].getContext "2d"
     @isStart  = false
     @loop     = null

@@ -1,7 +1,4 @@
 config =
   FPS: 60
+  BORDER: false
   AUTO_RESIZE: true
-  RESOLUTION: {
-    width: 1024
-    height: 768
-  }
