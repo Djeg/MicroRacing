@@ -8,8 +8,8 @@ class BaseGraphic extends BaseCollector
   * @consructor
   * @param {string} name
   ###
-  constructor: (name) ->
-    @name = name
+  constructor: () ->
+    @name = @constructor.name.replace('Graphic', '')
     @game = null
 
   ###*
@@ -30,6 +30,11 @@ class BaseGraphic extends BaseCollector
   ###
   isLoad: () ->
     true
+
+  ###*
+  * Initialize graphics
+  ###
+  init: () ->
 
   ###*
   * Draw the graphic

@@ -11,7 +11,7 @@ class BaseScene
     @game     = null
     @input    = null
     @mouse    = null
-    @name     = @constructor.name
+    @name     = @constructor.name.replace 'Scene', ''
     @graphics = new GraphicCollection
     @actors   = new ActorCollection
 
@@ -50,7 +50,7 @@ class BaseScene
   isLoad: () ->
     for name, graphic of @graphics.items
       if not graphic.isLoad()
-        false
+        return false
     true
 
   ###*
@@ -68,6 +68,13 @@ class BaseScene
   ###
   init: () ->
     throw "Scene #{@constructor.name} init need to be defined"
+
+  ###*
+  * Initialize graphics
+  ###
+  initGraphics: () ->
+    for name, graphic of @graphics.items
+      graphic.init()
 
   ###*
   * Display the scene on the canvas screen

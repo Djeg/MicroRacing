@@ -43,17 +43,19 @@ class Game
   ###
   constructor: (id) ->
     @id       = id
-    @element  = $ "##{id}"
-    if @element.length < 1
+    @$        = $ "##{id}"
+    @element  = document.getElementById id
+    if @element is null
       throw "No DOM element with id #{id}"
-    @context  = @element[0].getContext "2d"
-    @isStart  = false
-    @loop     = null
-    @FPS      = config.FPS
-    @scenes   = []
-    @scene = null
-    @input = new Input "body"
-    @mouse = new Mouse "##{@id}"
+    @context = @element.getContext "2d"
+    @isStart = false
+    @loop    = null
+    @FPS     = config.FPS
+    @scenes  = []
+    @scene   = null
+    @input   = new Input "body"
+    @mouse   = new Mouse "##{@id}"
+    @globals = {}
     if config.AUTO_RESIZE
       Game.resizeCanvas "##{@id}"
       self = @
@@ -85,14 +87,16 @@ class Game
     for scene in @scenes
       if scene.name is sceneName
         @scene = scene
+        break
     if null is @scene
       throw "Invalid scene #{sceneName}"
-    self        = @
+    self   = @
     @scene = scene
     @scene.setUpGame @
     @scene.init()
     @scene.setUpGraphics()
     @scene.setUpActors()
+    @scene.initGraphics()
     @loop       = window.setInterval (() -> self.draw()), 1000/@FPS
     @isStart    = on
 
@@ -116,4 +120,37 @@ class Game
       throw "Unable to stop a game not started :("
     @context.clearRect 0, 0, @element.width, @element.height
     @isStart = off
+    @scene = null
     window.clearInterval(@loop)
+
+  ###*
+  * Set up a global game variable
+  *
+  * @param {string} key
+  * @param {*} value
+  * @return {Game}
+  ###
+  set: (key, value) ->
+    @globals[key] = value
+    @
+
+  ###*
+  * Retrieve a global game variable
+  *
+  * @param {string} key
+  * @throws {String}, if the global at key does not exists
+  * @return {*}
+  ###
+  get: (key) ->
+    if undefined is @globals[key]
+      throw "Undefined global game variable ##{key}"
+    @globals[key]
+
+  ###*
+  * Test is a global variable exists
+  *
+  * @param {string} key
+  * @return {boolean}
+  ###
+  has: (key) ->
+    if undefined is @globals[key] then false else true

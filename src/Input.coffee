@@ -23,6 +23,7 @@ class Input
   ###
   constructor: (selector) ->
     @keys     = []
+    @pushKeys = []
     self = @
     $(selector)
       .keydown((event) -> self.refresh event, true)
@@ -35,7 +36,8 @@ class Input
   * @param {boolean} pressing
   ###
   refresh: (event, pressing) ->
-    @keys[event.keyCode] = if pressing then true else false
+    @keys[event.keyCode]     = if pressing then on else off
+    @pushKeys[event.keyCode] = if pressing then on else off
 
   ###*
   * Test if a key is press
@@ -45,3 +47,16 @@ class Input
   ###
   isPress: (key) ->
     if @keys[parseInt key] then true else false
+
+  ###*
+  * Test if a key is push.
+  *
+  * @param {number} key
+  * @return boolean
+  ###
+  isPush: (key) ->
+    if @pushKeys[parseInt key] is on
+      @pushKeys[parseInt key] = off
+      true
+    else
+      false
